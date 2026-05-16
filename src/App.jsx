@@ -856,6 +856,135 @@ function Footer() {
 }
 
 /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   MUSIC PLAYER
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+const MUSIC_SRC = 'https://assets.mixkit.co/music/preview/mixkit-dreaming-big-31.mp3'
+
+function MusicPlayer() {
+  const audioRef = useRef(null)
+  const fadeRef = useRef(null)
+  const [playing, setPlaying] = useState(false)
+  const [ready, setReady] = useState(false)
+
+  const fadeTo = (target, onDone) => {
+    clearInterval(fadeRef.current)
+    const audio = audioRef.current
+    if (!audio) return
+    fadeRef.current = setInterval(() => {
+      const diff = target - audio.volume
+      if (Math.abs(diff) < 0.015) {
+        audio.volume = target
+        clearInterval(fadeRef.current)
+        onDone?.()
+      } else {
+        audio.volume += diff * 0.12
+      }
+    }, 40)
+  }
+
+  const toggle = () => {
+    const audio = audioRef.current
+    if (!audio) return
+    if (playing) {
+      fadeTo(0, () => audio.pause())
+      setPlaying(false)
+    } else {
+      audio.volume = 0
+      audio.play().then(() => {
+        fadeTo(0.32)
+        setPlaying(true)
+      }).catch(() => {})
+    }
+  }
+
+  useEffect(() => () => clearInterval(fadeRef.current), [])
+
+  const bars = [0.4, 1, 0.6, 0.85, 0.5]
+
+  return (
+    <>
+      <audio
+        ref={audioRef}
+        src={MUSIC_SRC}
+        loop
+        preload="none"
+        onCanPlayThrough={() => setReady(true)}
+      />
+
+      <motion.button
+        onClick={toggle}
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 4, duration: 0.8 }}
+        title={playing ? 'עצרי מוזיקה' : 'הפעילי מוזיקה'}
+        aria-label={playing ? 'עצרי מוזיקה' : 'הפעילי מוזיקה'}
+        className="fixed bottom-8 left-8 z-[300] w-11 h-11 rounded-full flex items-center justify-center transition-all duration-300"
+        style={{
+          background: 'rgba(28,20,16,0.75)',
+          backdropFilter: 'blur(10px)',
+          border: `1px solid rgba(212,175,128,${playing ? '0.7' : '0.3'})`,
+        }}
+      >
+        <AnimatePresence mode="wait">
+          {playing ? (
+            /* animated sound bars */
+            <motion.div
+              key="bars"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="flex items-end gap-[2.5px]"
+              style={{ height: 14 }}
+            >
+              {bars.map((h, i) => (
+                <motion.span
+                  key={i}
+                  animate={{ scaleY: [h, 1, h * 0.6, 0.9, h] }}
+                  transition={{
+                    duration: 1.1,
+                    delay: i * 0.13,
+                    repeat: Infinity,
+                    ease: 'easeInOut',
+                  }}
+                  style={{
+                    display: 'block',
+                    width: 2.5,
+                    height: '100%',
+                    borderRadius: 2,
+                    backgroundColor: 'rgba(212,175,128,0.9)',
+                    transformOrigin: 'bottom',
+                  }}
+                />
+              ))}
+            </motion.div>
+          ) : (
+            /* music note icon */
+            <motion.svg
+              key="note"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              width="15"
+              height="15"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="rgba(212,175,128,0.75)"
+              strokeWidth="1.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <path d="M9 18V5l12-2v13" />
+              <circle cx="6" cy="18" r="3" />
+              <circle cx="18" cy="16" r="3" />
+            </motion.svg>
+          )}
+        </AnimatePresence>
+      </motion.button>
+    </>
+  )
+}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
    APP
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
 export default function App() {
@@ -863,6 +992,7 @@ export default function App() {
     <div dir="rtl">
       <GrainOverlay />
       <CustomCursor />
+      <MusicPlayer />
       <Nav />
       <Hero />
       <Manifesto />
