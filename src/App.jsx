@@ -8,14 +8,14 @@ const PHONE = '972501234567'
 const IG = 'noamsocial_'
 
 const GALLERY = [
-  { url: 'https://images.unsplash.com/photo-1519741497674-611481863552?w=700&auto=format&fit=crop&q=80', alt: 'חופה' },
-  { url: 'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?w=700&auto=format&fit=crop&q=80', alt: 'פרחים' },
-  { url: 'https://images.unsplash.com/photo-1537633552985-df8429e8048b?w=700&auto=format&fit=crop&q=80', alt: 'כלה' },
-  { url: 'https://images.unsplash.com/photo-1469371670807-013ccf25f16a?w=700&auto=format&fit=crop&q=80', alt: 'ריקוד' },
-  { url: 'https://images.unsplash.com/photo-1465495976277-4387d4b0b4c6?w=700&auto=format&fit=crop&q=80', alt: 'אווירה' },
-  { url: 'https://images.unsplash.com/photo-1583939003579-730e3918a45a?w=700&auto=format&fit=crop&q=80', alt: 'זוג' },
-  { url: 'https://images.unsplash.com/photo-1522673607200-164d1b6ce486?w=700&auto=format&fit=crop&q=80', alt: 'פרטים' },
-  { url: 'https://images.unsplash.com/photo-1550005809-91ad75fb315f?w=700&auto=format&fit=crop&q=80', alt: 'רגע' },
+  { url: '/gallery/g1.jpg', alt: 'כלה' },
+  { url: '/gallery/g2.jpg', alt: 'רעלה' },
+  { url: '/gallery/g3.jpg', alt: 'התארגנות' },
+  { url: '/gallery/g4.jpg', alt: 'אווירה' },
+  { url: '/gallery/g5.jpg', alt: 'ריקוד' },
+  { url: '/gallery/g6.jpg', alt: 'זוג' },
+  { url: '/gallery/g7.jpg', alt: 'שמפניה' },
+  { url: '/gallery/g8.jpg', alt: 'מאיה ושחר' },
 ]
 
 const TESTIMONIALS = [
