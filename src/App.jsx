@@ -858,7 +858,7 @@ function Footer() {
 /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
    MUSIC PLAYER
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
-const MUSIC_SRC = 'https://assets.mixkit.co/music/preview/mixkit-dreaming-big-31.mp3'
+const MUSIC_SRC = '/audio/bg.m4a'
 
 function MusicPlayer() {
   const audioRef = useRef(null)
