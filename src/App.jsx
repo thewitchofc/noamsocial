@@ -38,27 +38,45 @@ const TESTIMONIALS = [
 
 const PACKAGES = [
   {
-    name: 'עדינה',
-    sub: 'Essential',
-    price: '₪X,XXX',
-    duration: '4 שעות',
-    features: ['כיסוי 4 שעות', '2–3 סטוריז מעוצבים', 'תמונה מוכנה לפרסום', 'מסירה תוך 24 שעות'],
+    name: 'חבילת הכנות',
+    sub: 'Getting Ready',
+    tagline: 'רגע לפני שהקסם מתחיל',
+    duration: '5 שעות',
+    features: [
+      'הגעה לקלוקיישן ההכנות',
+      'צילום דיטיילס, אביזרים ושמלה',
+      '4 רילס מוכנים לפרסום',
+      'סטורי מלא ללא הגבלה',
+      'תוכן סטיילס מקצועי',
+    ],
     highlight: false,
   },
   {
-    name: 'מלאה',
+    name: 'חבילת יום מלא',
     sub: 'Full Day',
-    price: '₪XX,XXX',
-    duration: 'יום שלם',
-    features: ['כיסוי יום מלא', 'רילס מוכן עד חצות', 'סטוריז לאורך היום', '5–8 תמונות לאינסטגרם', 'ייעוץ תוכן קצר'],
+    tagline: 'הסיפור המלא של היום',
+    duration: 'מהכנות ועד הכניסה',
+    features: [
+      'צילום ברציפות — מהכנות ועד הכניסה',
+      'חופה, ריקודים וכל הרגעים שבינהם',
+      'רילס + סטורי ללא הגבלה',
+      'תוכן סטיילס ודיטיילס',
+      'תוכן מוכן לפרסום באותו לילה',
+    ],
     highlight: true,
   },
   {
-    name: 'פרימיום',
-    sub: 'Premium',
-    price: '₪XX,XXX',
-    duration: 'יום + שבוע',
-    features: ['הכל ב"מלאה"', '2 רילס', 'קפסולת תוכן לשבוע', 'ייעוץ אסטרטגיה', 'מעקב ביצועים'],
+    name: 'ציוני ליוני',
+    sub: 'Bachelorette',
+    tagline: 'הלילה שלפני הגדול',
+    duration: '5 שעות',
+    features: [
+      'הגעה לפני האורחות — כלה בלבד',
+      'צילום הכנת הכלה בבית',
+      '3 רילס מוכנים לפרסום',
+      'סטורי מלא ללא הגבלה',
+      'תוכן מוכן תוך 3 ימי עסקים',
+    ],
     highlight: false,
   },
 ]
@@ -531,7 +549,7 @@ function Packages() {
             חבילות
           </h2>
           <p className="text-[#1C1410]/38 text-sm mt-4 font-light">
-            מחירים לדוגמה — כל הצעה מותאמת אישית
+            לכל שאלה ופרט — צרי קשר ואשלח הצעה מותאמת אישית
           </p>
         </FadeUp>
 
@@ -563,9 +581,9 @@ function Packages() {
                   </p>
                 </div>
 
-                <div className={`font-display text-5xl mb-9 ${pkg.highlight ? 'text-[#D4AF80]' : 'text-[#C4956A]'}`}>
-                  {pkg.price}
-                </div>
+                <p className={`font-display text-2xl italic mb-9 leading-snug ${pkg.highlight ? 'text-[#D4AF80]' : 'text-[#C4956A]'}`}>
+                  {pkg.tagline}
+                </p>
 
                 <ul className="flex-1 space-y-4 mb-10">
                   {pkg.features.map((f, fi) => (
@@ -593,6 +611,19 @@ function Packages() {
             </FadeUp>
           ))}
         </div>
+
+        {/* Bundle note */}
+        <FadeUp delay={0.3} className="mt-10">
+          <div className="border border-[#C4956A]/25 rounded-2xl px-8 py-6 text-center max-w-2xl mx-auto">
+            <p className="font-display text-xl text-[#1C1410] italic mb-2">
+              מזמינות גם ציוני ליוני וגם יום מלא?
+            </p>
+            <p className="text-[#1C1410]/50 text-sm font-light">
+              שילוב שתי החבילות מזכה בתמחור מיוחד — צרי קשר לפרטים.
+            </p>
+          </div>
+        </FadeUp>
+
       </div>
     </section>
   )
