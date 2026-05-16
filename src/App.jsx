@@ -373,15 +373,20 @@ function Hero() {
       id="hero"
       className="relative min-h-screen overflow-hidden bg-[#1C1410] flex items-center md:items-end pb-0 md:pb-36"
     >
-      {/* Background */}
+      {/* Background video */}
       <div className="absolute inset-0">
-        <img
-          src="https://images.unsplash.com/photo-1469371670807-013ccf25f16a?w=1800&auto=format&fit=crop&q=80"
-          alt=""
-          className="w-full h-full object-cover opacity-35"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#1C1410] via-[#1C1410]/40 to-[#1C1410]/10" />
-        <div className="absolute inset-0 bg-gradient-to-r from-[#1C1410]/70 via-transparent to-transparent" />
+        <video
+          autoPlay
+          muted
+          loop
+          playsInline
+          className="w-full h-full object-cover"
+          style={{ opacity: 0.55 }}
+        >
+          <source src="/video/hero-bg.mp4" type="video/mp4" />
+        </video>
+        <div className="absolute inset-0 bg-gradient-to-t from-[#1C1410] via-[#1C1410]/30 to-[#1C1410]/10" />
+        <div className="absolute inset-0 bg-gradient-to-r from-[#1C1410]/60 via-transparent to-transparent" />
       </div>
 
       {/* ── MOBILE layout ── */}
@@ -771,12 +776,12 @@ function Gallery() {
           </FadeUp>
         </div>
 
-        <div className="columns-2 md:columns-3 gap-3 md:gap-4 [column-fill:balance]">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-3">
           {GALLERY.map((img, i) => (
-            <FadeUp key={i} delay={i * 0.06} className="break-inside-avoid mb-3 md:mb-4">
+            <FadeUp key={i} delay={i * 0.06}>
               <motion.div
-                whileHover={{ scale: 1.02 }}
-                transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
+                whileHover={{ scale: 1.03 }}
+                transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
                 data-cursor="gallery"
                 className="relative overflow-hidden rounded-xl"
               >
