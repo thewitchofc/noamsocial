@@ -299,7 +299,7 @@ function Nav() {
             src="/logo.png"
             alt="noamsocial"
             className="h-8 w-auto"
-            style={{ mixBlendMode: 'screen' }}
+            style={{ filter: 'invert(1) brightness(1.1)' }}
           />
         </a>
 
@@ -828,8 +828,8 @@ function Footer() {
           <img
             src="/logo.png"
             alt="noamsocial"
-            className="h-7 w-auto opacity-70 hover:opacity-100 transition-opacity duration-300"
-            style={{ mixBlendMode: 'screen' }}
+            className="h-7 w-auto opacity-60 hover:opacity-90 transition-opacity duration-300"
+            style={{ filter: 'invert(1) brightness(1.1)' }}
           />
         </a>
 
