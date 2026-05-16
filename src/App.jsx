@@ -294,8 +294,13 @@ function Nav() {
       }`}
     >
       <div className="max-w-6xl mx-auto px-6 flex items-center justify-between">
-        <a href="#hero" className="font-display text-2xl italic text-[#F5EFE6] tracking-wide select-none">
-          נועם
+        <a href="#hero" className="select-none">
+          <img
+            src="/logo.png"
+            alt="noamsocial"
+            className="h-8 w-auto"
+            style={{ mixBlendMode: 'screen' }}
+          />
         </a>
 
         <ul className="hidden md:flex gap-9 list-none m-0 p-0">
@@ -819,8 +824,13 @@ function Footer() {
   return (
     <footer className="py-10 px-6 bg-[#1C1410] border-t border-white/5">
       <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-5">
-        <a href="#hero" className="font-display text-2xl italic text-[#F5EFE6]/60 tracking-wide">
-          נועם
+        <a href="#hero">
+          <img
+            src="/logo.png"
+            alt="noamsocial"
+            className="h-7 w-auto opacity-70 hover:opacity-100 transition-opacity duration-300"
+            style={{ mixBlendMode: 'screen' }}
+          />
         </a>
 
         <div className="flex items-center gap-8">
