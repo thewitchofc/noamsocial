@@ -38,7 +38,7 @@ const TESTIMONIALS = [
 
 const PACKAGES = [
   {
-    name: 'חבילת הכנות',
+    name: 'חבילת התארגנות',
     sub: 'Getting Ready',
     tagline: 'רגע לפני שהקסם מתחיל',
     duration: '5 שעות',
@@ -55,7 +55,7 @@ const PACKAGES = [
     name: 'חבילת יום מלא',
     sub: 'Full Day',
     tagline: 'הסיפור המלא של היום',
-    duration: 'מהכנות ועד הכניסה',
+    duration: 'ללא הגבלת שעות',
     features: [
       'צילום ברציפות — מהכנות ועד הכניסה',
       'חופה, ריקודים וכל הרגעים שבינהם',
@@ -66,8 +66,8 @@ const PACKAGES = [
     highlight: true,
   },
   {
-    name: 'ציוני ליוני',
-    sub: 'Bachelorette',
+    name: 'ליווי חינה / הפרשת חלה',
+    sub: 'Henna & Challah',
     tagline: 'הלילה שלפני הגדול',
     duration: '5 שעות',
     features: [
@@ -298,7 +298,7 @@ function Nav() {
           <img
             src="/logo.png"
             alt="noamsocial"
-            className="h-8 w-auto"
+            className="hidden md:block h-14 w-auto"
             style={{ filter: 'invert(1) brightness(1.1)' }}
           />
         </a>
@@ -322,7 +322,7 @@ function Nav() {
           rel="noopener noreferrer"
           className="hidden md:block text-sm border border-[#D4AF80]/40 text-[#D4AF80] px-6 py-2.5 rounded-full hover:bg-[#D4AF80]/10 transition-all duration-300 font-light tracking-wide"
         >
-          צרו קשר
+          צרי קשר
         </a>
 
         <button
@@ -371,7 +371,7 @@ function Hero() {
   return (
     <section
       id="hero"
-      className="relative min-h-screen flex items-end pb-24 md:pb-36 overflow-hidden bg-[#1C1410]"
+      className="relative min-h-screen overflow-hidden bg-[#1C1410] flex items-center md:items-end pb-0 md:pb-36"
     >
       {/* Background */}
       <div className="absolute inset-0">
@@ -384,19 +384,54 @@ function Hero() {
         <div className="absolute inset-0 bg-gradient-to-r from-[#1C1410]/70 via-transparent to-transparent" />
       </div>
 
-      {/* Content */}
-      <div className="relative z-10 max-w-6xl mx-auto px-6 w-full">
-        <div className="max-w-3xl">
-          <motion.p
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1.1, delay: 0.4 }}
-            className="text-[#D4AF80]/60 text-xs tracking-[0.4em] uppercase font-light mb-10"
-          >
-            צלמת סושיאל עילית לחתונות
-          </motion.p>
+      {/* ── MOBILE layout ── */}
+      <div className="md:hidden relative z-10 w-full flex flex-col items-center justify-center min-h-screen px-6 text-center gap-8">
+        {/* Logo — hero on mobile */}
+        <motion.img
+          src="/logo.png"
+          alt="NOAM SOCIAL"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1.1, delay: 0.4, ease: [0.22, 1, 0.36, 1] }}
+          className="w-64 h-auto"
+          style={{ filter: 'invert(1) brightness(1.1)' }}
+        />
 
-          <h1 className="font-display text-6xl sm:text-7xl md:text-[5.5rem] lg:text-[7rem] text-[#F5EFE6] leading-[1] mb-10">
+        {/* Subtitle */}
+        <motion.h1
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1, delay: 0.9 }}
+          className="font-display text-3xl text-[#F5EFE6] leading-snug"
+        >
+          כי הרגעים הכי יפים —<br />
+          <span className="text-[#D4AF80]">מגיעים לחיות פעמיים.</span>
+        </motion.h1>
+
+        <motion.p
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 1, delay: 1.4 }}
+          className="text-[#F5EFE6]/45 text-sm font-light leading-relaxed max-w-xs"
+        >
+          תוכן מוכן לפרסום — רילס, סטוריז ותמונות — עוד ביום החתונה.
+        </motion.p>
+
+        <motion.a
+          href="#contact"
+          initial={{ opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 1.8 }}
+          className="inline-flex items-center text-sm text-[#1C1410] bg-[#D4AF80] px-8 py-4 rounded-full hover:bg-[#C4956A] hover:text-[#F5EFE6] transition-all duration-300 font-medium tracking-wide"
+        >
+          בואי נדבר
+        </motion.a>
+      </div>
+
+      {/* ── DESKTOP layout ── */}
+      <div className="hidden md:block relative z-10 max-w-6xl mx-auto px-6 w-full">
+        <div className="max-w-3xl">
+          <h1 className="font-display text-[5.5rem] lg:text-[7rem] text-[#F5EFE6] leading-[1] mb-10">
             <WordReveal text="כי הרגעים" delay={0.6} className="block mb-1" />
             <WordReveal text="הכי יפים —" delay={0.95} className="block text-[#D4AF80] mb-1" />
             <WordReveal text="מגיעים לחיות" delay={1.3} className="block mb-1" />
@@ -407,7 +442,7 @@ function Hero() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 1.4, delay: 2.4 }}
-            className="text-[#F5EFE6]/45 text-base md:text-lg font-light leading-relaxed mb-12 max-w-sm"
+            className="text-[#F5EFE6]/45 text-lg font-light leading-relaxed mb-12 max-w-sm"
           >
             תוכן מוכן לפרסום — רילס, סטוריז ותמונות — עוד ביום החתונה.
           </motion.p>
@@ -419,7 +454,7 @@ function Hero() {
             transition={{ duration: 0.9, delay: 2.8 }}
             className="inline-flex items-center gap-3 text-sm text-[#1C1410] bg-[#D4AF80] px-9 py-4 rounded-full hover:bg-[#C4956A] hover:text-[#F5EFE6] transition-all duration-400 font-medium tracking-wide"
           >
-            בואו נדבר
+            בואי נדבר
           </motion.a>
         </div>
       </div>
@@ -489,14 +524,54 @@ function Manifesto() {
 }
 
 /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   SPECIALTIES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+const SPECIALTIES = [
+  'אירועי קדם חתונה',
+  'הפרשת חלה',
+  'חינה',
+  'מקווה',
+  'סייב דה דייט',
+  'הפקות אופנה',
+]
+
+function Specialties() {
+  return (
+    <section className="py-16 md:py-20 px-6 bg-[#1C1410] border-t border-white/5">
+      <div className="max-w-5xl mx-auto">
+        <FadeUp className="text-center mb-10">
+          <SectionLabel light>תחומי התמחות</SectionLabel>
+        </FadeUp>
+        <FadeUp delay={0.1}>
+          <div className="flex flex-wrap justify-center gap-3">
+            {SPECIALTIES.map((s, i) => (
+              <motion.span
+                key={i}
+                initial={{ opacity: 0, y: 12 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: i * 0.08, ease: [0.22, 1, 0.36, 1] }}
+                className="text-sm font-light tracking-wide text-[#D4AF80]/70 border border-[#D4AF80]/20 px-5 py-2 rounded-full hover:border-[#D4AF80]/50 hover:text-[#D4AF80] transition-all duration-300"
+              >
+                {s}
+              </motion.span>
+            ))}
+          </div>
+        </FadeUp>
+      </div>
+    </section>
+  )
+}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
    HOW IT WORKS
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
 function HowItWorks() {
   const steps = [
     {
       num: '01',
-      title: 'נפגשים',
-      desc: 'לפני החתונה — שיחה קצרה להכיר מי אתם, מה אתם אוהבים, ומה אתם רוצים שהרשת תראה.',
+      title: 'שיחת טלפון',
+      desc: 'לפני החתונה — שיחה קצרה להכיר מי אתן, מה אתן אוהבות, ומה אתן רוצות שהרשת תראה.',
     },
     {
       num: '02',
@@ -506,7 +581,7 @@ function HowItWorks() {
     {
       num: '03',
       title: 'עוד בלילה',
-      desc: 'רילס, סטוריז ותמונות — מוכנים לפרסום. פותחים את הטלפון ומוצאים את הסיפור שלכם.',
+      desc: 'רילס, סטוריז ותמונות — מוכנים לפרסום. פותחות את הטלפון ומוצאות את הסיפור שלכן.',
     },
   ]
 
@@ -537,6 +612,35 @@ function HowItWorks() {
           ))}
         </div>
       </div>
+    </section>
+  )
+}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   SHOWREEL
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+function Showreel() {
+  const ref = useRef(null)
+  const inView = useInView(ref, { once: true, amount: 0.3 })
+
+  return (
+    <section ref={ref} className="relative bg-[#1C1410] overflow-hidden">
+      <motion.div
+        initial={{ opacity: 0, scale: 1.04 }}
+        animate={inView ? { opacity: 1, scale: 1 } : {}}
+        transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
+        className="relative w-full"
+      >
+        <video
+          src="/video/hero.mp4"
+          autoPlay
+          muted
+          loop
+          playsInline
+          className="w-full h-auto max-h-[85vh] object-cover"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#1C1410]/60 via-transparent to-[#1C1410]/30 pointer-events-none" />
+      </motion.div>
     </section>
   )
 }
@@ -610,7 +714,7 @@ function Packages() {
                       : 'border border-[#1C1410]/18 text-[#1C1410]/70 hover:border-[#C4956A] hover:text-[#C4956A]'
                   }`}
                 >
-                  בחרו חבילה
+                  בחרי חבילה
                 </a>
               </motion.div>
             </FadeUp>
@@ -621,7 +725,7 @@ function Packages() {
         <FadeUp delay={0.3} className="mt-10">
           <div className="border border-[#C4956A]/25 rounded-2xl px-8 py-6 text-center max-w-2xl mx-auto">
             <p className="font-display text-xl text-[#1C1410] italic mb-2">
-              מזמינות גם ציוני ליוני וגם יום מלא?
+              מזמינות גם ליווי חינה / הפרשת חלה וגם יום מלא?
             </p>
             <p className="text-[#1C1410]/50 text-sm font-light">
               שילוב שתי החבילות מזכה בתמחור מיוחד — צרי קשר לפרטים.
@@ -647,7 +751,7 @@ function Gallery() {
             <h2 className="font-display text-5xl md:text-6xl text-[#F5EFE6] leading-tight">
               מה שיוצא
               <br />
-              מהיום שלכם
+              מהיום שלכן
             </h2>
           </FadeUp>
           <FadeUp delay={0.2} className="hidden md:block">
@@ -776,11 +880,11 @@ function Contact() {
         <FadeUp>
           <SectionLabel light>יצירת קשר</SectionLabel>
           <h2 className="font-display text-6xl md:text-7xl text-[#F5EFE6] leading-tight mb-6">
-            בואו{' '}
+            בואי{' '}
             <em className="text-[#D4AF80]">נדבר</em>
           </h2>
           <p className="text-[#F5EFE6]/35 text-base md:text-lg font-light leading-relaxed mb-14 max-w-sm mx-auto">
-            ספרו לי על היום הגדול שלכם — ואבנה לכם הצעה שתרגיש כמו בית.
+            ספרי לי על היום הגדול שלכן — ואבנה לכם הצעה שתרגיש כמו בית.
           </p>
         </FadeUp>
 
@@ -795,7 +899,7 @@ function Contact() {
               <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z" />
               <path d="M12 0C5.373 0 0 5.373 0 12c0 2.135.561 4.14 1.541 5.875L0 24l6.303-1.519A11.943 11.943 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.818 9.818 0 01-5.001-1.366l-.359-.213-3.722.897.933-3.618-.234-.372A9.796 9.796 0 012.182 12C2.182 6.575 6.575 2.182 12 2.182S21.818 6.575 21.818 12 17.425 21.818 12 21.818z" />
             </svg>
-            שלחו הודעה ב-WhatsApp
+            שלחי הודעה ב-WhatsApp
           </a>
         </FadeUp>
 
@@ -828,7 +932,7 @@ function Footer() {
           <img
             src="/logo.png"
             alt="noamsocial"
-            className="h-7 w-auto opacity-60 hover:opacity-90 transition-opacity duration-300"
+            className="h-7 md:h-12 w-auto opacity-60 hover:opacity-90 transition-opacity duration-300"
             style={{ filter: 'invert(1) brightness(1.1)' }}
           />
         </a>
@@ -1006,7 +1110,9 @@ export default function App() {
       <Nav />
       <Hero />
       <Manifesto />
+      <Specialties />
       <HowItWorks />
+      <Showreel />
       <Packages />
       <Gallery />
       <Testimonials />
