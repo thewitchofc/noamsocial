@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://noamsocial.co.il/sitemap.xml
+
+# Block irrelevant paths
+Disallow: /src/
+Disallow: /node_modules/
