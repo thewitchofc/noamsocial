@@ -6,7 +6,7 @@ import Lenis from 'lenis'
 /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
    CONSTANTS
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
-const PHONE = '972501234567'
+const PHONE = '972534321073'
 const IG = 'noamsocial_'
 
 const GALLERY = [
@@ -119,6 +119,38 @@ const CURSOR_CFG = {
   text:    { size: 14, dotSize: 0,   dotOpacity: 0,   fill: 'rgba(212,175,128,0)',    border: 'rgba(212,175,128,0.3)', glow: 'none' },
   gallery: { size: 78, dotSize: 0,   dotOpacity: 0,   fill: 'rgba(212,175,128,0.07)', border: 'rgba(212,175,128,0.8)', glow: '0 0 28px rgba(212,175,128,0.25)' },
 }
+
+/* HeroVideo — autoplay background video, fades in when ready */
+const HeroVideo = memo(function HeroVideo() {
+  const videoRef = useRef(null)
+
+  useEffect(() => {
+    const el = videoRef.current
+    if (!el) return
+    const show = () => { el.style.opacity = '0.52' }
+    el.addEventListener('canplay', show, { once: true })
+    // If already ready (cached), show immediately
+    if (el.readyState >= 3) show()
+    return () => el.removeEventListener('canplay', show)
+  }, [])
+
+  return (
+    <video
+      ref={videoRef}
+      autoPlay
+      muted
+      loop
+      playsInline
+      preload="auto"
+      className="absolute inset-0 w-full h-full object-cover hidden md:block"
+      style={{ opacity: 0, transition: 'opacity 1.2s ease', willChange: 'opacity' }}
+      aria-hidden="true"
+    >
+      <source src="/video/hero-bg-compressed.mp4" type="video/mp4" />
+      <source src="/video/hero-bg.mp4" type="video/mp4" />
+    </video>
+  )
+})
 
 /* Zero React re-renders — all state lives in useRef, DOM written directly in rAF */
 function CustomCursor() {
@@ -518,43 +550,6 @@ function CineLine({ children, delay = 0, className = '' }) {
   )
 }
 
-/* Lazy-loads the hero background video after window.load — desktop only */
-const HeroVideo = memo(function HeroVideo() {
-  const videoRef = useRef(null)
-
-  useEffect(() => {
-    const load = () => {
-      if (videoRef.current) {
-        videoRef.current.load()
-        videoRef.current.play().catch(() => {})
-      }
-    }
-    if (document.readyState === 'complete') {
-      // Already loaded — small delay so first paint is done
-      setTimeout(load, 200)
-    } else {
-      window.addEventListener('load', load, { once: true })
-    }
-    return () => window.removeEventListener('load', load)
-  }, [])
-
-  return (
-    <video
-      ref={videoRef}
-      muted
-      loop
-      playsInline
-      preload="none"                     /* don't fetch until we trigger it */
-      className="absolute inset-0 w-full h-full object-cover hidden md:block"
-      style={{ opacity: 0.52 }}
-      aria-hidden="true"
-    >
-      <source src="/video/hero-bg-compressed.mp4" type="video/mp4" />
-      <source src="/video/hero-bg.mp4" type="video/mp4" />
-    </video>
-  )
-})
-
 function Hero() {
   const ease = [0.16, 1, 0.3, 1]
 
@@ -587,8 +582,8 @@ function Hero() {
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 3.2, ease: 'easeOut' }}
         >
-          {/* Static poster — shown immediately while video loads, also only background on mobile */}
-          <picture className="absolute inset-0">
+          {/* Poster — mobile only (no video on mobile) */}
+          <picture className="absolute inset-0 md:hidden">
             <source srcSet="/video/hero-poster.webp" type="image/webp" />
             <img
               src="/video/hero-poster.jpg"
@@ -599,7 +594,7 @@ function Hero() {
             />
           </picture>
 
-          {/* Video — hidden on mobile, lazy-loaded on desktop after page load */}
+          {/* Video — desktop only, fades in when ready */}
           <HeroVideo />
         </motion.div>
       </motion.div>
