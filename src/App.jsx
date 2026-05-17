@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { motion, useInView, AnimatePresence } from 'framer-motion'
+import { BrowserRouter, Routes, Route, Link, useLocation, useNavigate } from 'react-router-dom'
 
 /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
    CONSTANTS
@@ -20,19 +21,36 @@ const GALLERY = [
 
 const TESTIMONIALS = [
   {
-    quote: 'בלילה של החתונה כבר היה לנו רילס שגרם לכולם לבכות. לא האמנו שזה אפשרי.',
-    name: 'שירה ואבי',
-    date: 'מרץ 2024',
+    quote: 'נועם אהובתי! ואו ואו ואו איזה אישה את, לא יכלתי לבקש יותר טובה ממך באופן האישי והמקצועי! תודה על הכלללל, מעריכה. מחכה לשלישי כבר.',
+    name: 'כלה',
   },
   {
-    quote: 'נועם הפכה את היום שלנו לסיפור שכולם רצו לראות. לא רק לתעד — ליצור.',
-    name: 'ליאור ומיטל',
-    date: 'ינואר 2024',
+    quote: 'היית פשוט מדהימה, עדינה, מבינה עניין, זורמת עם הצלמים, עוזרת לי עם השמלות. היית סופר מקצועית ומהממת ואני כל כך שמחה שבאת!',
+    name: 'כלה',
   },
   {
-    quote: 'קמנו בבוקר שאחרי עם תוכן מוכן, ערוך ומושלם. כאילו מישהו חי את היום שלנו.',
-    name: 'תמר וגיא',
-    date: 'נובמבר 2023',
+    quote: 'את מוכשרת בטירוף! באמת אין מילים.',
+    name: 'כלה',
+  },
+  {
+    quote: 'תודה על הכל! הייתי מושלמת!! איך אני שמחה שהיית איתי ביום הזה, מעבר למקצועיות שלך, הרגעת אותי ועשית לי אווירה כיפית.',
+    name: 'כלה',
+  },
+  {
+    quote: 'נועם, לא יודעת מה הייתי עושה בלעדייך ביום הזה. מעבר לזה שאת מצלמת הכי יפה בעולם, נתת תמיכה, עזרה ואת ממש היית שם בשבילי. זה לא מובן מאליו בכלל.',
+    name: 'כלה',
+  },
+  {
+    quote: 'הוצאת דברים כל כך מושלמים, תודה לך. אין ספק שלקחת אותך הייתה הבחירה הנכונה.',
+    name: 'כלה',
+  },
+  {
+    quote: 'התעלית על כל הציפיות ומעבר. המקצועיות, הרוגע והכיף שהכנסת, היית לגמרי כמו עוד מלווה. אני פשוט לא מפסיקה להודות על הרגע שלא ויתרתי עלייך.',
+    name: 'כלה',
+  },
+  {
+    quote: 'סגרתי אותך דקה תשעים כי חשבתי שאני יכולה גם בלי סושיאל, אבל יש גדול. את לא רק בתפקיד הזה, את הרבה מעבר. נתת לי נחת ולא זזת ממני כמו מלווה. מעריכה ואוהבת אותך!',
+    name: 'כלה',
   },
 ]
 
@@ -43,7 +61,7 @@ const PACKAGES = [
     tagline: 'רגע לפני שהקסם מתחיל',
     duration: '5 שעות',
     features: [
-      'הגעה לקלוקיישן ההכנות',
+      'הגעה ללוקיישן',
       'צילום דיטיילס, אביזרים ושמלה',
       '4 רילס מוכנים לפרסום',
       'סטורי מלא ללא הגבלה',
@@ -57,7 +75,7 @@ const PACKAGES = [
     tagline: 'הסיפור המלא של היום',
     duration: 'ללא הגבלת שעות',
     features: [
-      'צילום ברציפות — מהכנות ועד הכניסה',
+      'צילום ברציפות מהכנות ועד הכניסה',
       'חופה, ריקודים וכל הרגעים שבינהם',
       'רילס + סטורי ללא הגבלה',
       'תוכן סטיילס ודיטיילס',
@@ -71,8 +89,8 @@ const PACKAGES = [
     tagline: 'הלילה שלפני הגדול',
     duration: '5 שעות',
     features: [
-      'הגעה לפני האורחות — כלה בלבד',
-      'צילום הכנת הכלה בבית',
+      'הגעה לפני האורחות, כלה בלבד',
+      'צילום הכנת הכלה במקום ההתארגנות',
       '3 רילס מוכנים לפרסום',
       'סטורי מלא ללא הגבלה',
       'תוכן מוכן תוך 3 ימי עסקים',
@@ -270,69 +288,103 @@ function SectionLabel({ children, light = false }) {
 function Nav() {
   const [scrolled, setScrolled] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
+  const location = useLocation()
+  const navigate = useNavigate()
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 60)
-    window.addEventListener('scroll', onScroll)
+    window.addEventListener('scroll', onScroll, { passive: true })
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
+  // Close mobile menu on route change
+  useEffect(() => { setMenuOpen(false); window.scrollTo(0, 0) }, [location.pathname])
+
+  const isHome = location.pathname === '/'
+
   const links = [
-    { label: 'הפילוסופיה', href: '#what' },
-    { label: 'תהליך', href: '#how' },
-    { label: 'חבילות', href: '#packages' },
-    { label: 'גלריה', href: '#gallery' },
-    { label: 'יצירת קשר', href: '#contact' },
+    { label: 'חבילות', to: '/packages' },
+    { label: 'גלריה', to: '/gallery' },
+    { label: 'ביקורות', to: '/testimonials' },
   ]
+
+  const handleNavClick = (link) => {
+    if (link.hash && isHome) {
+      document.getElementById(link.hash)?.scrollIntoView({ behavior: 'smooth' })
+    } else if (link.hash && !isHome) {
+      navigate('/')
+      setTimeout(() => document.getElementById(link.hash)?.scrollIntoView({ behavior: 'smooth' }), 300)
+    }
+    setMenuOpen(false)
+  }
+
+  const isActive = (link) => {
+    if (link.to && !link.hash) return location.pathname === link.to
+    return false
+  }
 
   return (
     <nav
       className={`fixed top-0 inset-x-0 z-[200] transition-all duration-700 ${
-        scrolled
-          ? 'bg-[#1C1410]/95 backdrop-blur-md py-4 border-b border-white/5'
-          : 'bg-transparent py-7'
+        !isHome
+          ? 'bg-[#1C1410]/95 backdrop-blur-md border-b border-white/5 py-4'
+          : scrolled
+            ? 'md:bg-[#1C1410]/95 md:backdrop-blur-md md:border-b md:border-white/5 py-4'
+            : 'bg-transparent py-7'
       }`}
     >
       <div className="max-w-6xl mx-auto px-6 flex items-center justify-between">
-        <a href="#hero" className="select-none">
+        <Link to="/" className="select-none">
           <img
             src="/logo.png"
             alt="noamsocial"
             className="hidden md:block h-14 w-auto"
             style={{ filter: 'invert(1) brightness(1.1)' }}
           />
-        </a>
+        </Link>
 
         <ul className="hidden md:flex gap-9 list-none m-0 p-0">
           {links.map((l) => (
-            <li key={l.href}>
-              <a
-                href={l.href}
-                className="text-sm text-[#F5EFE6]/50 hover:text-[#F5EFE6] transition-colors duration-300 font-light tracking-wide"
-              >
-                {l.label}
-              </a>
+            <li key={l.label}>
+              {l.hash ? (
+                <button
+                  onClick={() => handleNavClick(l)}
+                  className={`text-sm transition-colors duration-300 font-light tracking-wide ${
+                    isActive(l) ? 'text-[#F5EFE6]' : 'text-[#F5EFE6]/50 hover:text-[#F5EFE6]'
+                  }`}
+                >
+                  {l.label}
+                </button>
+              ) : (
+                <Link
+                  to={l.to}
+                  className={`text-sm transition-colors duration-300 font-light tracking-wide ${
+                    isActive(l) ? 'text-[#F5EFE6]' : 'text-[#F5EFE6]/50 hover:text-[#F5EFE6]'
+                  }`}
+                >
+                  {l.label}
+                </Link>
+              )}
             </li>
           ))}
         </ul>
 
-        <a
-          href={`https://wa.me/${PHONE}`}
-          target="_blank"
-          rel="noopener noreferrer"
+        <Link
+          to="/contact"
           className="hidden md:block text-sm border border-[#D4AF80]/40 text-[#D4AF80] px-6 py-2.5 rounded-full hover:bg-[#D4AF80]/10 transition-all duration-300 font-light tracking-wide"
         >
           צרי קשר
-        </a>
+        </Link>
 
         <button
           onClick={() => setMenuOpen((v) => !v)}
-          className="md:hidden p-2 flex flex-col gap-1.5"
+          className="md:hidden p-3 flex flex-col gap-1.5"
+          style={{ mixBlendMode: 'difference' }}
           aria-label="תפריט"
         >
-          <motion.div animate={{ rotate: menuOpen ? 45 : 0, y: menuOpen ? 7 : 0 }} className="w-5 h-px bg-[#F5EFE6]" />
-          <motion.div animate={{ opacity: menuOpen ? 0 : 1 }} className="w-5 h-px bg-[#F5EFE6]" />
-          <motion.div animate={{ rotate: menuOpen ? -45 : 0, y: menuOpen ? -7 : 0 }} className="w-5 h-px bg-[#F5EFE6]" />
+          <motion.div animate={{ rotate: menuOpen ? 45 : 0, y: menuOpen ? 7 : 0 }} className="w-5 h-px bg-white" />
+          <motion.div animate={{ opacity: menuOpen ? 0 : 1 }} className="w-5 h-px bg-white" />
+          <motion.div animate={{ rotate: menuOpen ? -45 : 0, y: menuOpen ? -7 : 0 }} className="w-5 h-px bg-white" />
         </button>
       </div>
 
@@ -347,15 +399,30 @@ function Nav() {
           >
             <div className="px-6 py-7 flex flex-col gap-5">
               {links.map((l) => (
-                <a
-                  key={l.href}
-                  href={l.href}
-                  onClick={() => setMenuOpen(false)}
-                  className="text-[#F5EFE6]/65 text-lg font-light"
-                >
-                  {l.label}
-                </a>
+                l.hash ? (
+                  <button
+                    key={l.label}
+                    onClick={() => handleNavClick(l)}
+                    className="text-[#F5EFE6]/65 text-lg font-light text-right"
+                  >
+                    {l.label}
+                  </button>
+                ) : (
+                  <Link
+                    key={l.label}
+                    to={l.to}
+                    className="text-[#F5EFE6]/65 text-lg font-light"
+                  >
+                    {l.label}
+                  </Link>
+                )
               ))}
+              <Link
+                to="/contact"
+                className="text-[#D4AF80]/80 text-lg font-light"
+              >
+                יצירת קשר
+              </Link>
             </div>
           </motion.div>
         )}
@@ -383,6 +450,8 @@ function Hero() {
           className="w-full h-full object-cover"
           style={{ opacity: 0.55 }}
         >
+          <source src="/video/hero-bg-new.mov" type="video/quicktime" />
+          <source src="/video/hero-bg-new.mov" type="video/mp4" />
           <source src="/video/hero-bg.mp4" type="video/mp4" />
         </video>
         <div className="absolute inset-0 bg-gradient-to-t from-[#1C1410] via-[#1C1410]/30 to-[#1C1410]/10" />
@@ -409,8 +478,10 @@ function Hero() {
           transition={{ duration: 1, delay: 0.9 }}
           className="font-display text-3xl text-[#F5EFE6] leading-snug"
         >
-          כי הרגעים הכי יפים —<br />
-          <span className="text-[#D4AF80]">מגיעים לחיות פעמיים.</span>
+          כי לרגעים<br />
+          <span className="text-[#D4AF80]">הכי יפים</span><br />
+          מגיע לחיות<br />
+          פעמיים.
         </motion.h1>
 
         <motion.p
@@ -419,12 +490,12 @@ function Hero() {
           transition={{ duration: 1, delay: 1.4 }}
           className="text-[#F5EFE6]/45 text-sm font-light leading-relaxed max-w-xs"
         >
-          תוכן מוכן לפרסום — רילס, סטוריז ותמונות — עוד ביום החתונה.
-        </motion.p>
+            תוכן מוכן לפרסום: רילס, סטוריז ותמונות. עוד ביום החתונה.
+          </motion.p>
 
-        <motion.a
-          href="#contact"
-          initial={{ opacity: 0, y: 8 }}
+          <motion.a
+            href="/contact"
+            initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 1.8 }}
           className="inline-flex items-center text-sm text-[#1C1410] bg-[#D4AF80] px-8 py-4 rounded-full hover:bg-[#C4956A] hover:text-[#F5EFE6] transition-all duration-300 font-medium tracking-wide"
@@ -437,9 +508,9 @@ function Hero() {
       <div className="hidden md:block relative z-10 max-w-6xl mx-auto px-6 w-full">
         <div className="max-w-3xl">
           <h1 className="font-display text-[5.5rem] lg:text-[7rem] text-[#F5EFE6] leading-[1] mb-10">
-            <WordReveal text="כי הרגעים" delay={0.6} className="block mb-1" />
-            <WordReveal text="הכי יפים —" delay={0.95} className="block text-[#D4AF80] mb-1" />
-            <WordReveal text="מגיעים לחיות" delay={1.3} className="block mb-1" />
+            <WordReveal text="כי לרגעים" delay={0.6} className="block mb-1" />
+            <WordReveal text="הכי יפים" delay={0.95} className="block text-[#D4AF80] mb-1" />
+            <WordReveal text="מגיע לחיות" delay={1.3} className="block mb-1" />
             <WordReveal text="פעמיים." delay={1.65} className="block" />
           </h1>
 
@@ -449,11 +520,11 @@ function Hero() {
             transition={{ duration: 1.4, delay: 2.4 }}
             className="text-[#F5EFE6]/45 text-lg font-light leading-relaxed mb-12 max-w-sm"
           >
-            תוכן מוכן לפרסום — רילס, סטוריז ותמונות — עוד ביום החתונה.
+            תוכן מוכן לפרסום: רילס, סטוריז ותמונות. עוד ביום החתונה.
           </motion.p>
 
           <motion.a
-            href="#contact"
+            href="/contact"
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.9, delay: 2.8 }}
@@ -496,14 +567,14 @@ function Manifesto() {
         <div className="font-display text-4xl md:text-5xl lg:text-[4rem] text-[#1C1410] leading-[1.2] mb-16">
           <WordReveal text="אני לא מגיעה לתעד." className="block mb-2" delay={0.1} />
           <WordReveal text="אני מגיעה ליצור." className="block text-[#C4956A] mb-2" delay={0.5} />
-          <WordReveal text="כי היום הזה — ראוי לחיות שוב." className="block mb-2" delay={0.95} />
+          <WordReveal text="כי היום הזה ראוי לחיות שוב." className="block mb-2" delay={0.95} />
           <WordReveal text="ושוב." className="block text-[#C4956A]" delay={1.4} />
         </div>
 
         <FadeUp delay={0.3}>
           <p className="text-[#1C1410]/55 text-base md:text-lg font-light leading-[1.8] max-w-xl mx-auto mb-10">
-            בעוד כולם מבינים שזה יום אחד — אני מבינה שזה תוכן לנצח.
-            כל רגע, כל מבט, כל פרט — הופך לסיפור שנשאר ברשת,
+            בעוד כולם מבינים שזה יום אחד, אני מבינה שזה תוכן לנצח.
+            כל רגע, כל מבט, כל פרט הופך לסיפור שנשאר ברשת,
             חי ומדובר, זמן רב אחרי שהאורחים חזרו הביתה.
           </p>
         </FadeUp>
@@ -576,17 +647,17 @@ function HowItWorks() {
     {
       num: '01',
       title: 'שיחת טלפון',
-      desc: 'לפני החתונה — שיחה קצרה להכיר מי אתן, מה אתן אוהבות, ומה אתן רוצות שהרשת תראה.',
+      desc: 'לפני החתונה: שיחה קצרה להכיר מי אתן, מה אתן אוהבות, ומה אתן רוצות שהרשת תראה.',
     },
     {
       num: '02',
       title: 'ביום עצמו',
-      desc: 'אני שם לב לרגעים שאף אחד אחר לא מתעד — ומייצרת תוכן בזמן אמת, לאורך כל היום.',
+      desc: 'אני שם לב לרגעים שאף אחד אחר לא מתעד, ומייצרת תוכן בזמן אמת, לאורך כל היום.',
     },
     {
       num: '03',
       title: 'עוד בלילה',
-      desc: 'רילס, סטוריז ותמונות — מוכנים לפרסום. פותחות את הטלפון ומוצאות את הסיפור שלכן.',
+      desc: 'רילס, סטוריז ותמונות, מוכנים לפרסום. פותחות את הטלפון ומוצאות את הסיפור שלכן.',
     },
   ]
 
@@ -663,7 +734,7 @@ function Packages() {
             חבילות
           </h2>
           <p className="text-[#1C1410]/38 text-sm mt-4 font-light">
-            לכל שאלה ופרט — צרי קשר ואשלח הצעה מותאמת אישית
+            לכל שאלה ופרט? צרי קשר ואשלח הצעה מותאמת אישית
           </p>
         </FadeUp>
 
@@ -712,7 +783,7 @@ function Packages() {
                 </ul>
 
                 <a
-                  href="#contact"
+                  href="/contact"
                   className={`block text-center py-3.5 rounded-full text-sm font-light tracking-wide transition-all duration-300 ${
                     pkg.highlight
                       ? 'bg-[#D4AF80] text-[#1C1410] hover:bg-[#C4956A] hover:text-[#F5EFE6]'
@@ -733,7 +804,7 @@ function Packages() {
               מזמינות גם ליווי חינה / הפרשת חלה וגם יום מלא?
             </p>
             <p className="text-[#1C1410]/50 text-sm font-light">
-              שילוב שתי החבילות מזכה בתמחור מיוחד — צרי קשר לפרטים.
+              שילוב שתי החבילות מזכה בתמחור מיוחד. צרי קשר לפרטים.
             </p>
           </div>
         </FadeUp>
@@ -783,12 +854,12 @@ function Gallery() {
                 whileHover={{ scale: 1.03 }}
                 transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
                 data-cursor="gallery"
-                className="relative overflow-hidden rounded-xl"
+                className="relative overflow-hidden rounded-xl aspect-[3/4]"
               >
                 <img
                   src={img.url}
                   alt={img.alt}
-                  className="w-full h-auto block"
+                  className="w-full h-full object-cover block"
                   loading="lazy"
                 />
                 <div className="absolute inset-0 bg-[#1C1410]/15 opacity-0 hover:opacity-100 transition-opacity duration-500" />
@@ -815,57 +886,133 @@ function Gallery() {
 /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
    TESTIMONIALS
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+const REVIEW_SCREENSHOTS = [
+  '/reviews/r1.png',
+  '/reviews/r2.png',
+  '/reviews/r3.png',
+  '/reviews/r4.png',
+  '/reviews/r5.png',
+  '/reviews/r6.png',
+  '/reviews/r7.png',
+  '/reviews/r8.png',
+]
+
 function Testimonials() {
   const [current, setCurrent] = useState(0)
+  const [tab, setTab] = useState('quotes')
 
   useEffect(() => {
+    if (tab !== 'quotes') return
     const id = setInterval(() => {
       setCurrent((c) => (c + 1) % TESTIMONIALS.length)
     }, 6500)
     return () => clearInterval(id)
-  }, [])
+  }, [tab])
 
   const t = TESTIMONIALS[current]
 
   return (
     <section id="testimonials" className="py-28 md:py-44 px-6 bg-[#EDE5D8]">
-      <div className="max-w-4xl mx-auto">
-        <FadeUp className="text-center mb-20">
+      <div className="max-w-5xl mx-auto">
+        <FadeUp className="text-center mb-14">
           <SectionLabel>אמרו עלי</SectionLabel>
         </FadeUp>
 
-        <div className="relative min-h-[220px] flex flex-col items-center justify-center text-center">
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={current}
-              initial={{ opacity: 0, y: 28 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -28 }}
-              transition={{ duration: 0.85, ease: [0.22, 1, 0.36, 1] }}
-            >
-              <blockquote className="font-display text-3xl md:text-4xl lg:text-5xl text-[#1C1410] leading-[1.25] italic mb-8">
-                "{t.quote}"
-              </blockquote>
-              <p className="text-[#C4956A] text-sm font-light tracking-wide">{t.name}</p>
-              <p className="text-[#1C1410]/30 text-xs font-light mt-1">{t.date}</p>
-            </motion.div>
-          </AnimatePresence>
-        </div>
-
-        <div className="flex items-center justify-center gap-3 mt-14">
-          {TESTIMONIALS.map((_, i) => (
+        {/* Tab switcher */}
+        <FadeUp delay={0.1} className="flex justify-center mb-14">
+          <div className="flex gap-1 bg-[#1C1410]/8 rounded-full p-1">
             <button
-              key={i}
-              onClick={() => setCurrent(i)}
-              aria-label={`המלצה ${i + 1}`}
-              className={`transition-all duration-400 rounded-full ${
-                i === current
-                  ? 'w-7 h-1.5 bg-[#C4956A]'
-                  : 'w-1.5 h-1.5 bg-[#C4956A]/25 hover:bg-[#C4956A]/50'
+              onClick={() => setTab('quotes')}
+              className={`px-6 py-2 rounded-full text-sm font-light tracking-wide transition-all duration-400 ${
+                tab === 'quotes'
+                  ? 'bg-[#1C1410] text-[#F5EFE6]'
+                  : 'text-[#1C1410]/50 hover:text-[#1C1410]'
               }`}
-            />
-          ))}
-        </div>
+            >
+              ציטוטים
+            </button>
+            <button
+              onClick={() => setTab('screenshots')}
+              className={`px-6 py-2 rounded-full text-sm font-light tracking-wide transition-all duration-400 ${
+                tab === 'screenshots'
+                  ? 'bg-[#1C1410] text-[#F5EFE6]'
+                  : 'text-[#1C1410]/50 hover:text-[#1C1410]'
+              }`}
+            >
+              צילומי מסך
+            </button>
+          </div>
+        </FadeUp>
+
+        <AnimatePresence mode="wait">
+          {tab === 'quotes' ? (
+            <motion.div
+              key="quotes"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+            >
+              <div className="relative min-h-[220px] flex flex-col items-center justify-center text-center">
+                <AnimatePresence mode="wait">
+                  <motion.div
+                    key={current}
+                    initial={{ opacity: 0, y: 28 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -28 }}
+                    transition={{ duration: 0.85, ease: [0.22, 1, 0.36, 1] }}
+                  >
+                    <blockquote className="font-display text-3xl md:text-4xl lg:text-5xl text-[#1C1410] leading-[1.25] italic mb-8">
+                      "{t.quote}"
+                    </blockquote>
+                    <p className="text-[#C4956A] text-sm font-light tracking-wide">{t.name}</p>
+                  </motion.div>
+                </AnimatePresence>
+              </div>
+
+              <div className="flex items-center justify-center gap-3 mt-14">
+                {TESTIMONIALS.map((_, i) => (
+                  <button
+                    key={i}
+                    onClick={() => setCurrent(i)}
+                    aria-label={`המלצה ${i + 1}`}
+                    className={`transition-all duration-400 rounded-full ${
+                      i === current
+                        ? 'w-7 h-1.5 bg-[#C4956A]'
+                        : 'w-1.5 h-1.5 bg-[#C4956A]/25 hover:bg-[#C4956A]/50'
+                    }`}
+                  />
+                ))}
+              </div>
+            </motion.div>
+          ) : (
+            <motion.div
+              key="screenshots"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+              className="columns-2 md:columns-3 lg:columns-4 gap-3 space-y-3"
+            >
+              {REVIEW_SCREENSHOTS.map((src, i) => (
+                <motion.div
+                  key={i}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: i * 0.06, ease: [0.22, 1, 0.36, 1] }}
+                  className="break-inside-avoid rounded-2xl overflow-hidden shadow-sm"
+                >
+                  <img
+                    src={src}
+                    alt={`ביקורת ${i + 1}`}
+                    className="w-full h-auto block"
+                    loading="lazy"
+                  />
+                </motion.div>
+              ))}
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     </section>
   )
@@ -889,7 +1036,7 @@ function Contact() {
             <em className="text-[#D4AF80]">נדבר</em>
           </h2>
           <p className="text-[#F5EFE6]/35 text-base md:text-lg font-light leading-relaxed mb-14 max-w-sm mx-auto">
-            ספרי לי על היום הגדול שלכן — ואבנה לכם הצעה שתרגיש כמו בית.
+            ספרי לי על היום הגדול שלכן ואבנה לכם הצעה שתרגיש כמו בית.
           </p>
         </FadeUp>
 
@@ -933,7 +1080,7 @@ function Footer() {
   return (
     <footer className="py-10 px-6 bg-[#1C1410] border-t border-white/5">
       <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-5">
-        <a href="#hero">
+        <a href="/">
           <img
             src="/logo.png"
             alt="noamsocial"
@@ -1104,25 +1251,105 @@ function MusicPlayer() {
 }
 
 /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-   APP
+   PAGE TRANSITION WRAPPER
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
-export default function App() {
+function PageTransition({ children }) {
   return (
-    <div dir="rtl">
-      <GrainOverlay />
-      <CustomCursor />
-      <MusicPlayer />
-      <Nav />
+    <motion.div
+      initial={{ opacity: 0, y: 18 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -18 }}
+      transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
+    >
+      {children}
+    </motion.div>
+  )
+}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   PAGES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+function HomePage() {
+  return (
+    <PageTransition>
       <Hero />
       <Manifesto />
       <Specialties />
       <HowItWorks />
       <Showreel />
-      <Packages />
-      <Gallery />
-      <Testimonials />
-      <Contact />
-      <Footer />
-    </div>
+    </PageTransition>
+  )
+}
+
+function PackagesPage() {
+  return (
+    <PageTransition>
+      <div className="pt-24 md:pt-28">
+        <Packages />
+      </div>
+    </PageTransition>
+  )
+}
+
+function GalleryPage() {
+  return (
+    <PageTransition>
+      <div className="pt-24 md:pt-28">
+        <Gallery />
+      </div>
+    </PageTransition>
+  )
+}
+
+function TestimonialsPage() {
+  return (
+    <PageTransition>
+      <div className="pt-24 md:pt-28">
+        <Testimonials />
+      </div>
+    </PageTransition>
+  )
+}
+
+function ContactPage() {
+  return (
+    <PageTransition>
+      <div className="pt-24 md:pt-28">
+        <Contact />
+      </div>
+    </PageTransition>
+  )
+}
+
+function AppRoutes() {
+  const location = useLocation()
+  return (
+    <AnimatePresence mode="wait">
+      <Routes location={location} key={location.pathname}>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/packages" element={<PackagesPage />} />
+        <Route path="/gallery" element={<GalleryPage />} />
+        <Route path="/testimonials" element={<TestimonialsPage />} />
+        <Route path="/contact" element={<ContactPage />} />
+      </Routes>
+    </AnimatePresence>
+  )
+}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   APP
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+export default function App() {
+  return (
+    <BrowserRouter>
+      <div dir="rtl">
+        <GrainOverlay />
+        <CustomCursor />
+        <MusicPlayer />
+        <Nav />
+        <AppRoutes />
+        <Footer />
+      </div>
+    </BrowserRouter>
   )
 }

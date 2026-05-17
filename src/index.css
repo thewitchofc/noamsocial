@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500;1,600&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@300;400;500;600;700&family=Assistant:wght@300;400;500&display=swap');
 
 @import "tailwindcss";
 
@@ -11,7 +11,7 @@ html {
 }
 
 body {
-  font-family: 'DM Sans', sans-serif;
+  font-family: 'Assistant', sans-serif;
   background-color: #F5EFE6;
   color: #1C1410;
   -webkit-font-smoothing: antialiased;
@@ -20,7 +20,7 @@ body {
 }
 
 .font-display {
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Frank Ruhl Libre', serif;
 }
 
 ::-webkit-scrollbar {
